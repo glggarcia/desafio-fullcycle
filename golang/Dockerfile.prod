@@ -1,0 +1,10 @@
+FROM golang:1.21 as building-stage
+WORKDIR /usr/app
+COPY index.go .
+RUN go build index.go
+
+FROM scratch as production-stage
+WORKDIR /prod/
+COPY --from=building-stage /usr/app/index .
+
+CMD [ "./index" ]
